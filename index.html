@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Speak</title>
+     <style>
+      body { margin: 0; } canvas {width: 150%;
+      height: 150% }
+    </style>
+
+    <!--   Fix favicon error -->
+    <link rel="shortcut icon" href="">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+
+
+</head>
+
+
+<body>
+    
+    <script src="js/three.min.js"></script>
+    <script src="js/OBJLoader.js"></script>
+    <script src="js/SourceLoader.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <script src="js/KeyboardState.js"></script>
+    <!-- By Jerome Etienne: http://jetienne.com/ -->
+
+
+    <div id="info">Click the record button and speak to add 3D shapes to the scene<br>
+        </div>
+
+    <!--Page container -->
+
+    <div class="container">
+
+        <!--Text box to contain spoken text -->
+        <div class="text-box" contenteditable="true"></div> 
+
+        <!-- Microphone icon -->
+        <i class="fas fa-microphone"></i> 
+    </div>
+
+    <!-- Sound when microphone is clicked -->
+    <audio class="mic-sound" src="chime.mp3"></audio> 
+    <br>
+
+    <div id="canvas"></div>
+
+    <a id="viewSrcButton" target="_blank" href="#" style="">View source</a>
+
+    <!-- link to scripts -->
+    <script src="js/colours.js"></script>
+    <script src="js/script.js"></script> 
+    <script src="js/index.js"></script>
+    
+
+</body>
+</html>

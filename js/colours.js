@@ -1,10 +1,6 @@
 
-var colors = [ 'aqua' , 'azure' , 'beige', 'bisque', 'black', 'blue', 'brown', 'chocolate', 'coral', 'crimson', 'cyan', 'fuchsia', 'ghostwhite', 'gold', 'goldenrod', 'gray', 'green', 'indigo', 'ivory', 'khaki', 'lavender', 'lime', 'linen', 'magenta', 'maroon', 'moccasin', 'navy', 'olive', 'orange', 'orchid', 'peru', 'pink', 'plum', 'purple', 'red', 'salmon', 'sienna', 'silver', 'snow', 'tan', 'teal', 'thistle', 'tomato', 'turquoise', 'violet', 'white', 'yellow'];
-
-//original colourNameToHex code from
-//http://stackoverflow.com/questions/1573053/javascript-function-to-convert-color-names-to-hex-codes
+// original colourNameToHex code from: http://stackoverflow.com/questions/1573053/javascript-function-to-convert-color-names-to-hex-codes
 function colourNameToHex(colour) {
-		//TODO, colors with more than one word
     var colours = {
     	"antique":"#faebd7",
     	"aqua":"#00ffff",
@@ -74,6 +70,3 @@ function colourNameToHex(colour) {
     }
     return false;
 }
-//end code from 
-//http://stackoverflow.com/questions/1573053/javascript-function-to-convert-color-names-to-hex-codes
-

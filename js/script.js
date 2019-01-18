@@ -2,6 +2,7 @@
 // Global variables
 var meshes = [];
 var meshes_size = 0;
+var spinning = [];
 
 
 var diffuseMaterial = new THREE.MeshLambertMaterial( {color: 0xffffff} );
@@ -66,20 +67,35 @@ function undo() {
   meshes.pop();
 }
 
-function createGeometry(geometry,colour,xpos) {
-  if (geometry == 'SphereGeometry') {
-    var geom = new THREE.SphereGeometry(1.0, 32, 32); // TODO: allow user to specify size
-    mesh = new THREE.Mesh(geom, new THREE.MeshPhongMaterial({color: colourNameToHex(colour)}))
-    addMesh(mesh);
-   
-  } else if (geometry == 'BoxGeometry') {
-    var geom = new THREE.BoxGeometry(2, 2, 2); // TODO: allow user to specify size
-    mesh = new THREE.Mesh(geom, new THREE.MeshPhongMaterial({color: colourNameToHex(colour)}))
-    addMesh(mesh);
-
+function clear() {
+  while(meshes.length > 0) {
+    meshes_size--;
+    scene.remove(meshes[meshes_size]);
+    meshes.pop();
   }
-     mesh.position.set(xpos,1,0);
-    scene.add(mesh); 
+}
+ 
+
+function createGeometry(geometry,colour,xpos,spin) {
+  if (geometry != null) {
+    var geom;
+    if (geometry == 'SphereGeometry') {
+      geom = new THREE.SphereGeometry(1.0, 32, 32); // TODO: allow user to specify size
+    } 
+    else if (geometry == 'BoxGeometry') {
+      geom = new THREE.BoxGeometry(2, 2, 2);
+    }
+    else if (geometry == 'TorusKnotGeometry') {
+      geom = new THREE.TorusKnotGeometry(1, 0.4, 64, 8, 2, 3);
+    }
+    mesh = new THREE.Mesh(geom, new THREE.MeshPhongMaterial({color: colourNameToHex(colour)}));
+    addMesh(mesh);
+  }
+  if (spin == 1) {
+      spinning.push(mesh);
+    }
+  mesh.position.set(xpos,2,0);
+  scene.add(mesh); 
 }
 
 
@@ -94,26 +110,51 @@ floor.position.y = -1.1;
 floor.rotation.x = Math.PI / 2;
 scene.add(floor);
 
+
 var divisions = 15;
 var gridHelper = new THREE.GridHelper( size, divisions );
 scene.add( gridHelper );
 
+//////////////////////////////////////////////////////////////////////////////////////
+// Set up lights
+///////////////////////////////////////////////////////////////////////////////////////
 ambientLight = new THREE.AmbientLight(0x606060);
 scene.add(ambientLight);
 light = new THREE.PointLight(0xffffff);
 light.position.set(0,4,2);
 scene.add(light);
-sphereGeometry = new THREE.SphereGeometry(0.3, 32, 32);    // radius, segments, segments
+var vcsLight = new THREE.Vector3(light.position);
 
-sphere = new THREE.Mesh(sphereGeometry, new THREE.MeshBasicMaterial( {color: 0xf6f0b6} ));
-sphere.position.set(0,4,2);
-sphere.position.set(light.position.x, light.position.y, light.position.z);
-scene.add(sphere);
+
+
+sphereGeometry = new THREE.SphereGeometry(0.3, 32, 32);    // radius, segments, segments
+lightSphere = new THREE.Mesh(sphereGeometry, new THREE.MeshBasicMaterial( {color: 0xf6f0b6} ));
+lightSphere.position.set(light.position.x, light.position.y, light.position.z);
+scene.add(lightSphere);
 
 boxGeometry = new THREE.BoxGeometry( 2, 2, 2 );
 box = new THREE.Mesh( boxGeometry, new THREE.MeshLambertMaterial( {color: 0xcccccc} ) );
 box.position.set(-4, 1, 0);
 scene.add( box );
+
+
+
+////////////////////// TOON SHADER /////////////////////////////
+var toonMaterial = new THREE.ShaderMaterial( {
+        uniforms: {
+           lightPosition: {value: new THREE.Vector3(0.0,0.0,-1.0) },
+           myColor: { value: new THREE.Vector4(0.79,0.79,0.83,1.0) }
+        },
+  vertexShader: document.getElementById( 'myVertShader').textContent,
+  fragmentShader: document.getElementById( 'toonFragShader' ).textContent
+} );
+///////////////////////////////////////////////////////////////
+
+var geometry = new THREE.TorusKnotGeometry(1, 0.4, 64, 8, 2, 3);
+var torusKnot = new THREE.Mesh( geometry, toonMaterial );
+torusKnot.position.set(-3,1.75,-3);
+scene.add( torusKnot );
+
 
 
 var worldFrame = new THREE.AxesHelper(5) ;
@@ -126,6 +167,30 @@ scene.add(worldFrame);
 
 var keyboard = new THREEx.KeyboardState();
 function checkKeyboard() {
+  vcsLight.set(light.position.x, light.position.y, light.position.z);
+  vcsLight.applyMatrix4(camera.matrixWorldInverse);
+  toonMaterial.uniforms.lightPosition.value = vcsLight;
+  toonMaterial.uniforms.lightPosition.value.needsUpdate = true;
+  if (keyboard.pressed("W")) {
+    console.log('W pressed');
+    light.position.y += 0.1;
+  } else if (keyboard.pressed("S"))
+    light.position.y -= 0.1;
+  if (keyboard.pressed("A"))
+    light.position.x -= 0.1;
+  else if (keyboard.pressed("D"))
+    light.position.x += 0.1;
+
+  lightSphere.position.set(light.position.x, light.position.y, light.position.z);
+
+  if (spinning.length != 0) {
+
+
+    spinning.forEach(function(mesh) {
+   mesh.rotation.y += 0.01;
+ });
+}
+
 }
 
 

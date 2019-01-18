@@ -4,25 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Speak</title>
-     <style>
-      body { margin: 0; } canvas {width: 150%;
-      height: 150% }
-    </style>
+    <title>Speech Shapes</title>
+    <style>
+    body { margin: 0; } canvas {width: 100%;
+      height: 100%; }
+      </style>
 
-    <!--   Fix favicon error -->
-    <link rel="shortcut icon" href="">
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-
-
-
-</head>
+      <!--   Fix favicon error -->
+      <link rel="shortcut icon" href="#">
+      <link rel="stylesheet" href="style.css">
+      <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 
-<body>
-    
+
+  </head>
+
+
+  <body>
+
     <script src="js/three.min.js"></script>
     <script src="js/OBJLoader.js"></script>
     <script src="js/SourceLoader.js"></script>
@@ -30,34 +30,69 @@
     <script src="js/KeyboardState.js"></script>
     <!-- By Jerome Etienne: http://jetienne.com/ -->
 
+    <div id="info">Click the record button and speak to add 3D shapes to the scene<br></div>
 
-    <div id="info">Click the record button and speak to add 3D shapes to the scene<br>
-        </div>
-
+    <div id="canvas">
     <!--Page container -->
-
     <div class="container">
 
         <!--Text box to contain spoken text -->
         <div class="text-box" contenteditable="true"></div> 
 
-        <!-- Microphone icon -->
-        <i class="fas fa-microphone"></i> 
+        <button class="record">Record</button>
+
     </div>
 
     <!-- Sound when microphone is clicked -->
     <audio class="mic-sound" src="chime.mp3"></audio> 
-    <br>
 
-    <div id="canvas"></div>
+    </div>
 
-    <a id="viewSrcButton" target="_blank" href="#" style="">View source</a>
+    
+
+    <a id="viewSrcButton" target="_blank" href="#" >View source</a>
 
     <!-- link to scripts -->
     <script src="js/colours.js"></script>
-    <script src="js/script.js"></script> 
-    <script src="js/index.js"></script>
     
+    <script src="js/index.js"></script>
 
+
+
+    <script id="myVertShader" type="x-shader/x-vertex">
+    uniform vec2 uvScale;
+    varying vec2 vUv;
+    varying vec3 vcsNormal;
+    varying vec3 ocsPosition;
+    varying vec3 vcsPosition;
+    void main()
+    {       
+      vUv = uvScale * uv;
+      ocsPosition = position;
+      vec4 vcsP = modelViewMatrix * vec4(ocsPosition,1.0);
+      vcsPosition = vcsP.xyz;
+      gl_Position = projectionMatrix * vcsP;   // pass on point in CCS
+      vcsNormal = normalMatrix * normal;       // normalMatrix is the transpose-inv of the rotation matrix
+}
+</script>
+<script id="toonFragShader" type="x-shader/x-fragment">
+    varying vec3 vcsNormal;
+    varying vec3 vcsPosition;
+    uniform vec3 lightPosition;
+    uniform vec3 myColor;
+
+    void main( void ) {
+      vec3 L = normalize(lightPosition - vcsPosition);
+      vec3 N = normalize(vcsNormal);
+
+      float i = max(0.0,dot(N,L));
+      i = floor(i*5.0)/5.0;
+
+  //gl_FragColor = vec4(0.9,0.9,0.3,1.0);   // default is yellow
+  gl_FragColor = vec4(myColor*i,1.0);
+}
+ </script>
+    
+<script src="js/script.js"></script> 
 </body>
 </html>

@@ -27,39 +27,52 @@ const dictate = () => {
 		if (event.results[0].isFinal) {
 			var color = 0;
 			var xpos = 0;
-			var spin = 0;
+			var ypos = 0;
+			
+
 			if (speechToText.includes('undo')) {
 				undo();
 				console.log("undo called");
 			}
-			if (speechToText.includes('clear all')) {
+			if (speechToText.includes('clear all') || speechToText.includes('delete all')) {
 				clear();
 				console.log("clear called");
 			}
+
 			else if (speechToText.includes('create')) {
 				if (speechToText.includes('color')) {
 					color = speechToText.split("color").pop().split(" ")[1];
 					console.log(color);
 				}
 				if (speechToText.includes(' X') || speechToText.includes(' x')) {
-					xpos = speechToText.toLowerCase().split('x').pop().match(/[0-9/-]+/g).join('');
+					xpos = speechToText.toLowerCase().split('x').pop().match(/[0-9]+/g)[0];
 					console.log("xpos = " + xpos);
 				}
-				if (speechToText.includes('spin')) {
-					spin = 1;
-					console.log("spinning = true");
+			
+
+				if (speechToText.includes(' Y') || speechToText.includes(' y')) {
+					ypos = speechToText.toLowerCase().split('y').pop().match(/[0-9]+/g)[0];
+					console.log("ypos = " + ypos);
 				}
+				
+
 				if (speechToText.includes('sphere')) {
-					createGeometry('SphereGeometry', color, xpos, spin);
+					createGeometry('SphereGeometry', color, xpos, ypos);
 					console.log("sphere created");
 				} else if (speechToText.includes('box') || speechToText.includes('cube')) {
-					createGeometry('BoxGeometry', color, xpos, spin);
+					createGeometry('BoxGeometry', color, xpos, ypos);
 					console.log("box created");
 				} else if (speechToText.includes('knot') || speechToText.includes('not')) {
-					createGeometry('TorusKnotGeometry', color, xpos, spin);
+					createGeometry('TorusKnotGeometry', color, xpos, ypos);
 					console.log("knot created");
 				} 
 
+
+			}
+
+			if (speechToText.includes('spin') || speechToText.includes('rotate') || speechToText.includes('rotating')) {
+				spinMesh();
+				console.log("spinning mesh");
 			};
 		}
 	}

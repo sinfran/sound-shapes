@@ -62,11 +62,16 @@ function addMesh(mesh) {
 // Remove the last mesh created
 ///////////////////////////////////////////////////////////////////////////////////////
 function undo() {
-  meshes_size--;
-  scene.remove(meshes[meshes_size]);
-  meshes.pop();
+  if (meshes.length > 0) {
+    meshes_size--;
+    scene.remove(meshes[meshes_size]);
+    meshes.pop();
+  }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////
+// Clear all meshes in scene
+///////////////////////////////////////////////////////////////////////////////////////
 function clear() {
   while(meshes.length > 0) {
     meshes_size--;
@@ -74,9 +79,18 @@ function clear() {
     meshes.pop();
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////
+// Add rotation to last created mesh
+///////////////////////////////////////////////////////////////////////////////////////
+function spinMesh() {
+  if (meshes.length != 0) {
+    spinning.push(meshes[meshes_size-1]);
+  }
+}
  
 
-function createGeometry(geometry,colour,xpos,spin) {
+function createGeometry(geometry,colour,xpos,ypos) {
   if (geometry != null) {
     var geom;
     if (geometry == 'SphereGeometry') {
@@ -91,10 +105,7 @@ function createGeometry(geometry,colour,xpos,spin) {
     mesh = new THREE.Mesh(geom, new THREE.MeshPhongMaterial({color: colourNameToHex(colour)}));
     addMesh(mesh);
   }
-  if (spin == 1) {
-      spinning.push(mesh);
-    }
-  mesh.position.set(xpos,2,0);
+  mesh.position.set(xpos,ypos,0);
   scene.add(mesh); 
 }
 

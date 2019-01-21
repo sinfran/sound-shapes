@@ -1,6 +1,4 @@
-
 body {
-  z-index: -1;
   background: #6e8bd1;
   color: black;
   font-size: 16px; 
@@ -16,19 +14,20 @@ body {
   color: white;
 }
 .container {
-  position: relative;
-  border: 1px solid #c1c0c0;
-  width: 40vw;
-  max-width: 60vw;
-  margin: 0 auto;
-  border-radius: 0.1rem;
-  background: #fdfdfd;
-  padding: 0.2rem 1rem;
-  overflow: hidden;
-  margin-top: 10vh;
+ position: absolute;
+ top: 10%;
+ left: 50%;
+ margin-right: -50%;
+ transform: translate(-50%, -50%);
+ width:250px;
+ height:40px;
+ padding: 8px;
+ color: #fff;
+ background-color: #fff;
+ opacity: 0.9;
+ text-decoration: none;
 }
 .text-box {
-  z-index: 200;
   max-height: 70vh;
   overflow: scroll;
 }
@@ -61,19 +60,18 @@ button.record {
     width: 85vw;
     max-width: 85vw;
   }
-.text-box {
+  .text-box {
     max-height: 55vh;
   }
 }
 
 #viewSrcButton {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 8px;
-    color: #fff;
-    background-color: #555;
-    opacity: 0.7;
-    text-decoration: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 8px;
+  color: #fff;
+  background-color: #555;
+  opacity: 0.7;
+  text-decoration: none;
 }
-

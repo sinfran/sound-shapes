@@ -1,4 +1,4 @@
-// Used to convert spoken colour into hex (conversions from http://stackoverflow.com/questions/1573053/javascript-function-to-convert-color-names-to-hex-codes)
+// Used to convert spoken colour into hex (conversions from http://stackoverflow.com/questions/1573053/javascript-function-to-convert-color-names-to-hex-codes
 function colourNameToHex(colour) {
     var colours = {
     	"antique":"#faebd7",

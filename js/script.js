@@ -133,7 +133,7 @@ scene.add(worldFrame);
 
 
 //////////////////////////////////////////////////////////////////////////////////////
-// Set up lights
+// Set up lights and fog
 ///////////////////////////////////////////////////////////////////////////////////////
 ambientLight = new THREE.AmbientLight(0x606060);
 scene.add(ambientLight);
@@ -147,6 +147,8 @@ sphereGeometry = new THREE.SphereGeometry(0.3, 32, 32);
 lightSphere = new THREE.Mesh(sphereGeometry, new THREE.MeshBasicMaterial( {color: 0xf6f0b6} ));
 lightSphere.position.set(light.position.x, light.position.y, light.position.z);
 scene.add(lightSphere);
+
+scene.fog = new THREE.FogExp2( 0x9999ff, 0.00025 );
 
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -293,6 +295,8 @@ var guiCreateFolder = guiCommandsFolder.addFolder('create');
 guiCreateFolder.add( commands, 'sphere');
 guiCreateFolder.add( commands, 'box');
 guiCreateFolder.add( commands, 'torusKnot');
+
+
 
 
 

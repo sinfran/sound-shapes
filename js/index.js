@@ -27,7 +27,7 @@ const dictate = () => {
 		if (event.results[0].isFinal) {
 			var color = 0;
 			var xpos = 0;
-			var ypos = 0;
+			var ypos = 1;
 			
 
 			if (speechToText.includes('undo')) {
@@ -38,7 +38,6 @@ const dictate = () => {
 				clear();
 				console.log("clear called");
 			}
-
 			else if (speechToText.includes('create')) {
 				if (speechToText.includes('color')) {
 					color = speechToText.split("color").pop().split(" ")[1];
@@ -48,15 +47,11 @@ const dictate = () => {
 					xpos = speechToText.toLowerCase().split('x').pop().match(/[0-9]+/g)[0];
 					console.log("xpos = " + xpos);
 				}
-			
-
 				if (speechToText.includes(' Y') || speechToText.includes(' y')) {
 					ypos = speechToText.toLowerCase().split('y').pop().match(/[0-9]+/g)[0];
 					console.log("ypos = " + ypos);
 				}
-				
-
-				if (speechToText.includes('sphere')) {
+				if (speechToText.includes('sphere') || speechToText.includes('fear')) {
 					createGeometry('SphereGeometry', color, xpos, ypos);
 					console.log("sphere created");
 				} else if (speechToText.includes('box') || speechToText.includes('cube')) {
@@ -66,8 +61,6 @@ const dictate = () => {
 					createGeometry('TorusKnotGeometry', color, xpos, ypos);
 					console.log("knot created");
 				} 
-
-
 			}
 
 			if (speechToText.includes('spin') || speechToText.includes('rotate') || speechToText.includes('rotating')) {
